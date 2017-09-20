@@ -1,12 +1,12 @@
 //https://stackoverflow.com/questions/16195032/implementation-of-addressof
+//already implemented in <memory>
 #include <iostream>
 
 class Test{
 public:
     int a;
     char b;
-private:
-    Test* operator &(){return nullptr;}
+//    Test* operator &(){return this;}
 };
 namespace custom{
     template <class T>
@@ -30,5 +30,6 @@ int main(){
     Test t;
     Test *p = custom::addressof(t);
     std::cout << reinterpret_cast<unsigned long long>(p) << std::endl;
+    std::cout << reinterpret_cast<unsigned long long>(&t) << std::endl;
     return 0;
 }
