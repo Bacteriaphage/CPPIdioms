@@ -36,7 +36,8 @@ public:
 };
 
 class Attorney{
-private:
+//private:
+public:
     static void client_callA(Client & cli){
         cli.A();
     }
@@ -46,7 +47,6 @@ private:
     static void derive_callfunc(Base & base, int i){
         base.func(i);
     }
-    friend int main();
 };
 
 
