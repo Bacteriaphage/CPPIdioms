@@ -1,6 +1,8 @@
 #include <memory>
 #include <iostream>
-
+/* this idiom helps shared_ptr act as raw point for inherit classs
+ * shared_ptr<B> bptr = make_share<D>(D())
+ * */
 using namespace std;
 
 class B{
