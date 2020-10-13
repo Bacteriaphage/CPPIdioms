@@ -1,0 +1,43 @@
+# STL
+1. (unordered) multi (map, set) doesn't have [] operator, erase will erase all with the specific key.
+2. (multi)(map, set) can achieve O(1) insert with a good hint iter, m.insert(iter, make_pair(key, val))
+
+# Constructor
+1. Default key word will let compiler generate default constructor even when user provided other constructer.
+2. Default constructor only stands for a constructor which can take no parameters, so A(int a = 0) is also a default constructor.
+3. Compiler will not generate dflt construtcor, copy constructor, assignment operator if any member in the class cannot be initialized normally(ref, const, member without dflt constructor, base class etc.)
+4. Hide or delete destructor to avoid generate object on stack, Hide or delete new/new[] to avoid generate object on heap.
+5. call virtual function in contructor/destructor of base class will call implemetation in base class because derived object (has not been created/has been destructed).Do not do this.
+6. "virtual constructor": create a virtual clone function in both base and derived, it take pointer of current class and return a (new current()) object. (To avoid B * b=new B(*d) which slice derived object)
+
+# Cast
+static_cast 1. old C style cast, 2. explicit cast to self-comment type conversion operator and conversion constructor. 3. cast between Base(*,&) and Derived(*,&) in compile time, no correctness guaranteed. D1->B->D2(wrong!) 
+(use explicit key word to avoid implicit conversion)
+const_cast remove const/volitile attribute
+dynamic_cast run time type info to avoid 3 in static_cast
+reinterpret_cast cast freely, don't use.
+# implicit type conversion
+## user defined
+constructor can take only one parameter without explicit keyword.
+type conversion operator, convert class type to another type e.g. "operator string() const {return to_string(data);}"
+
+# Concurrency
+1. condition variable wait need unique_lock to release mutex, don't use lock_guard
+2. promise-future: promise generate a future and (shared_future share the future for multiple function) async pass the future into function(s), later promise set value, then future in functions can get value.
+3. packaged_task<ret (paras...)>: pack both function obj and return, one thread get future of task. Function in another thread can run task, and other threads can get return by future.get()
+
+# smartpointer
+1. refernce count is a pointer of int, it will be point to a new allocated place when the shared_point is generated at the first time.
+2. don't generate the first shared_pointer with other statement, e.g. call a multi-parameters function with shared_pointer/unique_pointer generating fn(shared_ptr<A>(new A()), fn2())
+   there is no order for the execution, so if new A()->fn2()->shared_ptr, then if fn2 throw exception, memory will leak.
+   
+# polymorphism
+1. default parameter will bind with class in compile time, call a derived function with default parameter from a base pointer will using wrong parameter.
+2. if base has several function overloads for the same function name but derived has only one override of them, derived will hide all the other overloads, use using Base::func in derived to avoid this.
+   (name mangle does not work here, compiler just stop at derived once it find one func)
+3. static polymorphism, CRTP(Curiously recurring template pattern), instead of using dynamic binding with virtual keyword, using template to mimic polymorphism.
+   Base class is a template class, and any function need to be virtual need to use static_cast<*T>(this)->func to call the correct function in child class T, Child class inherit Base class with:
+   class Child : public Base<Child> to let function in Base class cast this pointer to a correct type and call the correct function. The price is hard to debug and make binary bigger than before.
+4. Diamond inheritance, add virtual keyword to middle class: "class mid : virtual public Base", in the most derived class, constructor has to initialize Base class.
+   Make Base and Mid as pure virtual class(contains no concrete function and data member) also can solve the problem without virtual keyword.
+   
