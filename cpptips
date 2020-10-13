@@ -8,7 +8,7 @@
 3. Compiler will not generate dflt construtcor, copy constructor, assignment operator if any member in the class cannot be initialized normally(ref, const, member without dflt constructor, base class etc.)
 4. Hide or delete destructor to avoid generate object on stack, Hide or delete new/new[] to avoid generate object on heap.
 5. call virtual function in contructor/destructor of base class will call implemetation in base class because derived object (has not been created/has been destructed).Do not do this.
-6. "virtual constructor": create a virtual clone function in both base and derived, it take pointer of current class and return a (new current()) object. (To avoid B * b=new B(*d) which slice derived object)
+6. "virtual constructor": create a virtual clone function in both base and derived, it returns a (new Current(*this)) pointer. use d->clone() to get correct new object. (To avoid B * b=new B(*d) which slice derived object)
 
 # Cast
 static_cast 1. old C style cast, 2. explicit cast to self-comment type conversion operator and conversion constructor. 3. cast between Base(*,&) and Derived(*,&) in compile time, no correctness guaranteed. D1->B->D2(wrong!) 
