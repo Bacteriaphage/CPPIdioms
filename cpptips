@@ -41,3 +41,7 @@ type conversion operator, convert class type to another type e.g. "operator stri
 4. Diamond inheritance, add virtual keyword to middle class: "class mid : virtual public Base", in the most derived class, constructor has to initialize Base class.
    Make Base and Mid as pure virtual class(contains no concrete function and data member) also can solve the problem without virtual keyword.
    
+# namespace
+## koenig lookup
+lookup order: local->same namespace of parameter type->global
+put a class and all function related to this class to a same namespace to enable koenig lookup
